@@ -49,6 +49,7 @@ under the nain software license.
 - [mason.nvim](https://github.com/williamboman/mason.nvim)
 - [dashboard-nvim](https://github.com/glepnir/dashboard-nvim)
 - [neostyle.nvim](https://github.com/shaunsingh/neovim-config)
-** and a lot more comin' soon **
+  
+**and a lot more comin' soon**
 
 thx 
