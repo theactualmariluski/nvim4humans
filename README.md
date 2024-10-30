@@ -43,7 +43,7 @@ under the nain software license.
 
 ### cool plugins that makes nv4h possible
 - [nvim-cmp](https://github.com/hrsh7th/nvim-cmp)
-- [catppuccino](https://github.com/catppuccin/nvim)
+- [catppuccin](https://github.com/catppuccin/nvim)
 - [NERDTree](https://github.com/preservim/nerdtree)
 - [lualine](https://github.com/nvim-lualine/lualine.nvim)
 - [mason.nvim](https://github.com/williamboman/mason.nvim)
