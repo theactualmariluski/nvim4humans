@@ -2,6 +2,10 @@
 
 nv4h is a new NeoVim configuration made for humans.
 
+## screenshot
+
+![just see the image :)](screenshot1.png)
+
 ## features
 
 - minimal
