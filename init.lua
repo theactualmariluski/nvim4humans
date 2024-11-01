@@ -1,4 +1,3 @@
-print("Welcome to NV4H!")
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -20,9 +19,26 @@ vim.g.mapleader = ' '
 require("lazy").setup({
     -- Colorscheme
     { "catppuccin/nvim", name = "catppuccin" },
+    -- AI
+    {
+        "supermaven-inc/supermaven-nvim",
+        config = function()
+            require("supermaven-nvim").setup({})
+        end
+    },
+    {
+	"lukas-reineke/indent-blankline.nvim",
+	config = function()
+		-- Other blankline configuration here
+		return require("indent-rainbowline").make_opts(opts)
+	end,
+	dependencies = {
+		"TheGLander/indent-rainbowline.nvim",
+        },
+    },
     -- Status line
     { "nvim-lualine/lualine.nvim", config = function() require("lualine").setup {} end },
-    -- File explorer (nvim-tree)
+    -- File explorer
     { "kyazdani42/nvim-tree.lua", config = function() require("nvim-tree").setup {} end },
     -- Dashboard
     { "glepnir/dashboard-nvim", config = function()
@@ -37,24 +53,35 @@ require("lazy").setup({
             },
         })
     end },
+    -- Mason
+    { "williamboman/mason.nvim", config = function() require("mason").setup() end },
+    { "williamboman/mason-lspconfig.nvim", config = function()
+        require("mason-lspconfig").setup({
+            ensure_installed = { "ts_ls", "pyright", "clangd", "omnisharp", "rust_analyzer" },
+        })
+    end },
     -- LSP Config
     { "neovim/nvim-lspconfig", config = function()
         local lspconfig = require("lspconfig")
-
-        -- Using ast-grep for multiple languages
-        lspconfig.ast_grep.setup{
-            cmd = { "ast-grep", "lsp" },
-            filetypes = { "c", "cpp", "javascript", "typescript", "python", "go", "rust", "java", "haskell", "zig", "bash", "ruby", "php" },
-        }
 
         lspconfig.ts_ls.setup{}   -- JavaScript/TypeScript
         lspconfig.pyright.setup{}    -- Python
         lspconfig.clangd.setup{}     -- C and C++
         lspconfig.omnisharp.setup{}  -- C#
         lspconfig.rust_analyzer.setup{} -- Rust
+
+        -- LSP Attach Autocommand
+        vim.api.nvim_create_autocmd("LspAttach", {
+            callback = function(ev)
+                local client = vim.lsp.get_client_by_id(ev.data.client_id)
+                if client then
+                    -- You can add buffer-specific settings or keymaps here
+                end
+            end,
+        })
     end },
     -- Autocompletion
-    { "hrsh7th/nvim-cmp", dependencies = { 
+    { "hrsh7th/nvim-cmp", dependencies = {
         "hrsh7th/cmp-nvim-lsp", 
         "hrsh7th/cmp-buffer", 
         "hrsh7th/cmp-path", 
@@ -66,16 +93,15 @@ require("lazy").setup({
         cmp.setup {
             snippet = {
                 expand = function(args)
-                    require('luasnip').lsp_expand(args.body)  -- For luasnip users.
+                    require('luasnip').lsp_expand(args.body)
                 end,
             },
             mapping = {
-                ['<C-k>'] = cmp.mapping.select_prev_item(),
-                ['<C-j>'] = cmp.mapping.select_next_item(),
+                ['<Up>'] = cmp.mapping.select_prev_item(),
+                ['<Down>'] = cmp.mapping.select_next_item(),
                 ['<C-d>'] = cmp.mapping.scroll_docs(-4),
                 ['<C-u>'] = cmp.mapping.scroll_docs(4),
-                ['<C-Space>'] = cmp.mapping.complete(),
-                ['<CR>'] = cmp.mapping.confirm { select = true },
+                ['<Right>'] = cmp.mapping.confirm { select = true },
             },
             sources = {
                 { name = 'nvim_lsp' },
@@ -84,14 +110,10 @@ require("lazy").setup({
             },
         }
     end },
-   -- Git integration
+    -- Git integration
     { "tpope/vim-fugitive" },
     -- Prettier for formatting
     { "sbdchd/neoformat" },
-    -- AI integration
-  { "supermaven-inc/supermaven-nvim", config = function()
-        require("supermaven-nvim").setup({})
-    end },
     -- Trouble for diagnostics
     { "folke/trouble.nvim", config = function()
         require("trouble").setup {
@@ -104,14 +126,6 @@ require("lazy").setup({
             auto_close = true,
             use_lsp_diagnostic_signs = true,
         }
-
-        vim.api.nvim_create_autocmd("LspAttach", {
-            callback = function()
-                if #vim.lsp.get_active_clients() > 0 then
-                    require("trouble").toggle()
-                end
-            end,
-        })
     end },
     -- Telescope for fuzzy finding
     { "nvim-telescope/telescope.nvim", requires = { {"nvim-lua/plenary.nvim"} }, config = function()
@@ -123,30 +137,32 @@ require("lazy").setup({
             highlight = {
                 enable = true,
             },
-            ensure_installed = "all",  -- Install all parsers
+            ensure_installed = "all",
         }
     end },
 })
 
 -- Colorscheme setup
 vim.cmd[[colorscheme catppuccin]]
+
 -- Lualine configuration
 require('lualine').setup {
     options = { theme = 'catppuccin' }
 }
 
 -- Keybindings
-vim.api.nvim_set_keymap('n', '<leader>xx', ':TroubleToggle<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>xw', ':TroubleNext<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>xp', ':TroublePrevious<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>ff', ':Telescope find_files<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>tg', ':Telescope live_grep<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>tb', ':Telescope buffers<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>th', ':Telescope help_tags<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>to', ':Telescope oldfiles<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>tc', ':Telescope colorscheme<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>dd', ':Dashboard<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>e', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
+local keymap = vim.api.nvim_set_keymap
+keymap('n', '<leader>xx', ':TroubleToggle<CR>', { noremap = true, silent = true })
+keymap('n', '<leader>xw', ':TroubleNext<CR>', { noremap = true, silent = true })
+keymap('n', '<leader>xp', ':TroublePrevious<CR>', { noremap = true, silent = true })
+keymap('n', '<leader>ff', ':Telescope find_files<CR>', { noremap = true, silent = true })
+keymap('n', '<leader>tg', ':Telescope live_grep<CR>', { noremap = true, silent = true })
+keymap('n', '<leader>tb', ':Telescope buffers<CR>', { noremap = true, silent = true })
+keymap('n', '<leader>th', ':Telescope help_tags<CR>', { noremap = true, silent = true })
+keymap('n', '<leader>to', ':Telescope oldfiles<CR>', { noremap = true, silent = true })
+keymap('n', '<leader>tc', ':Telescope colorscheme<CR>', { noremap = true, silent = true })
+keymap('n', '<leader>dd', ':Dashboard<CR>', { noremap = true, silent = true })
+keymap('n', '<leader>e', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
 -- Set options
 vim.opt.tabstop = 4
@@ -154,3 +170,4 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.number = true
 vim.opt.showmode = false
+

@@ -1,59 +1,42 @@
-# nvim For Humans (nv4h)
+# neovim for humans (nv4h)
 
-nv4h is a new NeoVim configuration made for humans.
-
-## screenshot
-
-![just see the image :)](screenshot1.png)
+nv4h is a new, minimal, and modern neovim configuration.
 
 ## features
 
-- minimal
-- easy to use
-- extensible
+- minimal UI
+- works out of the box
+- powered by [lazy.nvim](https://github.com/folke/lazy.nvim)
+- preety
 - fast
-- beautiful
-- functional
 - open source
-- ready to use
-- reliable
-- hyper-hackable
 
-## installation
+## install
 
-installation is _kinda_ easy.
-
-just cone out repo and you are good to go.
-
-```bash
-git clone https://github.com/theactualmariluski /nv4h.git ~/.config/nvim
+```sh
+git clone https://github.com/nv4h/nv4h.git && cd nv4h && cp init.lua ~/.config/nvim
 ```
+
+this jut clones our github, cd's into it
+and copies the init.lua file into your neovim config directory.
 
 ## usage
 
-just `nvim`.
+just run `nvim`, like, this a nvim config.
 
-## configuration
+## credits
 
-all configuration is made in one file.
-
-the `init.lua` file at `.config/nvim/init.lua`.
-
-## misc
-
-made with love by [mario rosell](https://github.com/theactualmariluski).
-
-under the nain software license.
-
-### cool plugins that makes nv4h possible
-- [nvim-cmp](https://github.com/hrsh7th/nvim-cmp)
+- [folke/lazy.nvim](https://github.com/folke/lazy.nvim)
 - [catppuccin](https://github.com/catppuccin/nvim)
-- [NERDTree](https://github.com/preservim/nerdtree)
-- [lualine](https://github.com/nvim-lualine/lualine.nvim)
-- [mason.nvim](https://github.com/williamboman/mason.nvim)
-- [dashboard-nvim](https://github.com/glepnir/dashboard-nvim)
-- [neostyle.nvim](https://github.com/shaunsingh/neovim-config)
-  
-**and a lot more comin' soon**
+- [nvim-tree.lua](https://github.com/kyazdani42/nvim-tree.lua)
+- [nvim-web-devicons](https://github.com/kyazdani42/nvim-web-devicons)
+- [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
+- [nvim-cmp](https://github.com/hrsh7th/nvim-cmp)
+- [nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer)
+- [nvim-colorizer.lua](https://github.com/norcalli/nvim-colorizer.lua)
+- [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
+- [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 
-thx 
+## license
+
+under the nain software license, see [LICENSE](LICENSE)
